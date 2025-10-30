@@ -36,6 +36,21 @@ class consultas{
       $stmt->execute();
       return json_encode(['success' => true, 'message' => 'Actividad eliminada correctamente']);
     }
-     }
+
+    //FUNCION OBTENER ACTIVIDAD POR ID
+    public static function obtenerActividad($id){
+      $conn=dbconexion::conectar();
+      $query="SELECT * FROM actividades WHERE id=?";
+      $stmt=$conn->prepare($query);
+      $stmt->bindParam(1, $id);
+      $stmt->execute();
+      $actividad = $stmt->fetch(PDO::FETCH_ASSOC);
+      if($actividad){
+        return json_encode(['success' => true, 'actividad' => $actividad]);
+      }else{
+        return json_encode(['success' => false, 'message' => 'Actividad no encontrada']);
+      }
+    }
+}
 
 ?>

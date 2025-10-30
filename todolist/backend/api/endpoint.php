@@ -9,12 +9,20 @@ class endpoint{
         return consultas::mostrarActividad();
     }
 
+    public static function obtenerActividad($id){
+        return consultas::obtenerActividad($id);
+    }
+
     public static function EndpointController(){
         if($_SERVER['REQUEST_METHOD'] == 'GET')
         {
             if(isset($_GET['mostar_actividades_getmethod'])){
                echo endpoint::mostrarActividades();
-            } else {
+            } 
+            else if(isset($_GET['obtener_actividad_getmethod'])){
+                echo endpoint::obtenerActividad($_GET['id']);
+            }
+            else {
                 echo json_encode(['error' => 'Parámetro no válido']);
             }
         } else if($_SERVER['REQUEST_METHOD'] == 'POST')

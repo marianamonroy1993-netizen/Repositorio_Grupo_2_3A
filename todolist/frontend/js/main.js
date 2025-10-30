@@ -64,7 +64,67 @@ function CrearActividad(){
  }
  
  
-    function MostrarActividad(){
+    function obtenerDetallesActividad() {
+  // Obtener el ID de la URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+
+  if (!id) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'No se proporcionó ID de actividad',
+      confirmButtonText: 'Volver',
+      allowOutsideClick: false
+    }).then((result) => {
+      window.location.href = 'index.html';
+    });
+    return;
+  }
+
+  $.ajax({
+    url: '../backend/api/endpoint.php',
+    type: 'GET',
+    dataType: 'json',
+    data: {
+      obtener_actividad_getmethod: true,
+      id: id
+    },
+    success: function(data) {
+      if (data.success && data.actividad) {
+        $('#actividad').text(data.actividad.actividad);
+        $('#descripcion').text(data.actividad.descripcion);
+        $('#estado').text(data.actividad.estado);
+        $('#fecha_creacion').text(data.actividad.fecha_de_creacion);
+        $('#fecha_actualizacion').text(data.actividad.fecha_de_actualizacion);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se encontró la actividad',
+          confirmButtonText: 'Volver',
+          allowOutsideClick: false
+        }).then((result) => {
+          window.location.href = 'index.html';
+        });
+      }
+    },
+    error: function(error) {
+      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de conexión',
+        text: 'No se pudo conectar con el servidor',
+        confirmButtonText: 'Volver',
+        allowOutsideClick: false
+      }).then((result) => {
+        window.location.href = 'index.html';
+      });
+    }
+  });
+}
+
+function MostrarActividad(){
  
        $.ajax({
          url: '../backend/api/endpoint.php',
