@@ -3,7 +3,7 @@
     padding: 0;
 }
 .cont_todolist{
-background-color: black;
+background-color: rgb(87, 117, 172);
 
 color: #ffffff;
 margin: 30px;
@@ -16,10 +16,10 @@ scrollbar-width: thin;
 }
 .fomulario_actividad{
     background-color: #ffffff;
-    color: #000000;
-    padding: 10px 10px;
-    margin: 10px auto;
-    max-width: 400px;
+    color: #ffddaa;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 600px;
     min-height: auto;
     
     /* Efecto de hoja de papel */
@@ -50,9 +50,70 @@ background-color: #ffffff;
 border: 2px solid #001aff;
 border-radius: 20px;
 align-items: center;
-color: #000000;
+color: #ee9393;
 padding: 10px;
 margin: 10px;
 width:50px ;
 height: auto;
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.btn {
+    margin-right: 0.5rem;
+}
+
+/* Estilos para los botones de descarga */
+.btn-descarga {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+.btn-descarga:hover {
+    background-color: #218838;
+}
+
+.btn-ver-pdf {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-ver-pdf:hover {
+    background-color: #138496;
+}
+
+.btn-descargar-pdf {
+    background-color: #343a40;
+    color: white;
+}
+
+.btn-descargar-pdf:hover {
+    background-color: #23272b;
+}
+
+/* Contenedor de botones */
+.botones-descarga {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* Ajustes responsive */
+@media (max-width: 576px) {
+    .botones-descarga {
+        flex-direction: column;
+    }
+    
+    .btn-descarga {
+        width: 100%;
+        margin: 5px 0;
+    }
 }

@@ -1,51 +1,495 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>  
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Todo List</title>
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/bootstrap-5.3.8-dist/css/bootstrap.min.css">
-        <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    </head>
-    <body>
-        <div class="container cont_todolist">
-            <h1 class="text-center">CREAR ACTIVIDAD</h1>
-         <a href="index.html" class="btn btn-primary">Regresar al index</a>
-      
-         <div class="container fomulario_actividad" >
+<head>  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Actividad - Todo List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --gray-color: #95a5a6;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+        
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--light-color);
+            text-decoration: none;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-block {
+            width: 100%;
+        }
+        
+        .form-footer {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-color);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .status-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .status-option {
+            flex: 1;
+            position: relative;
+        }
+        
+        .status-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .status-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .status-option input:checked + .status-label {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .status-icon {
+            font-size: 24px;
+        }
+        
+        .status-pending .status-icon {
+            color: var(--warning-color);
+        }
+        
+        .status-inprogress .status-icon {
+            color: var(--primary-color);
+        }
+        
+        .status-completed .status-icon {
+            color: var(--success-color);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header i {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .form-header h2 {
+            color: var(--secondary-color);
+            font-size: 24px;
+        }
+        
+        .character-count {
+            text-align: right;
+            font-size: 14px;
+            color: var(--gray-color);
+            margin-top: 5px;
+        }
+        
+        .character-count.warning {
+            color: var(--warning-color);
+        }
+        
+        .character-count.danger {
+            color: var(--danger-color);
+        }
+        
+        @media (max-width: 768px) {
+            .status-options {
+                flex-direction: column;
+            }
+            
+            .form-footer {
+                flex-direction: column;
+            }
+        }
+        
+        /* Estilos para SweetAlert2 personalizados */
+        .swal2-popup {
+            border-radius: var(--border-radius) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tasks"></i> Crear Actividad</h1>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver a la lista de actividades
+            </a>
+
+        </header>
+        
+        <div class="form-container">
+            <div class="form-header">
+                <i class="fas fa-plus-circle"></i>
+                <h2>Nueva Actividad</h2>
+                <p>Complete el formulario para agregar una nueva actividad</p>
+            </div>
+            
             <form action="" method="post" id="formulario_crear_actividad">
                 <div class="form-group">
-                    <label for="actividad">Actividad</label>
-                    <input type="text" class="form-control" id="actividad" name="actividad" required>
+                    <label for="actividad">
+                        <i class="fas fa-heading"></i> Nombre de la Actividad
+                    </label>
+                    <input type="text" class="form-control" id="actividad" name="actividad" 
+                           placeholder="Ingrese el nombre de la actividad" required>
+                    <div class="character-count" id="actividadCount">0/50</div>
                 </div>
+                
                 <div class="form-group">
-                    <label for="descripcion">Descripción</label>
-                    <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+                    <label for="descripcion">
+                        <i class="fas fa-align-left"></i> Descripción
+                    </label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" 
+                              placeholder="Describa los detalles de la actividad" required></textarea>
+                    <div class="character-count" id="descripcionCount">0/200</div>
                 </div>
+                
                 <div class="form-group">
-                    <label for="estado">Estado</label>
-                   <select name="estado" id="estado" class="form-control">
-                    <option value="1">Completado</option>
-                    <option value="0">Pendiente</option>
-                    <option value="2">En progreso</option>
-                   </select>
+                    <label for="estado">
+                        <i class="fas fa-tachometer-alt"></i> Estado
+                    </label>
+                    <div class="status-options">
+                        <div class="status-option status-pending">
+                            <input type="radio" id="estado-pendiente" name="estado" value="0" checked>
+                            <label for="estado-pendiente" class="status-label">
+                                <i class="fas fa-clock status-icon"></i>
+                                <span>Pendiente</span>
+                            </label>
+                        </div>
+                        
+                        <div class="status-option status-inprogress">
+                            <input type="radio" id="estado-progreso" name="estado" value="2">
+                            <label for="estado-progreso" class="status-label">
+                                <i class="fas fa-spinner status-icon"></i>
+                                <span>En Progreso</span>
+                            </label>
+                        </div>
+                        
+                        <div class="status-option status-completed">
+                            <input type="radio" id="estado-completado" name="estado" value="1">
+                            <label for="estado-completado" class="status-label">
+                                <i class="fas fa-check-circle status-icon"></i>
+                                <span>Completado</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-               
-                <button type="submit" class="btn btn-primary">Crear Actividad</button>
+                
+                <div class="form-footer">
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-save"></i> Crear Actividad
+                    </button>
+                </div>
             </form>
-         </div>
         </div>
-        <script src="js/jquery-3.7.1.min.js" ></script>
-        <script src="css/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-        <!-- SweetAlert2 JS -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="js/main.js"></script>
+    </div>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            CrearActividad();
+            // Inicializar contadores de caracteres
+            const actividadInput = document.getElementById('actividad');
+            const descripcionInput = document.getElementById('descripcion');
+            const actividadCount = document.getElementById('actividadCount');
+            const descripcionCount = document.getElementById('descripcionCount');
+            
+            actividadInput.addEventListener('input', function() {
+                const count = this.value.length;
+                actividadCount.textContent = `${count}/50`;
+                
+                if (count > 40) {
+                    actividadCount.classList.add('warning');
+                } else {
+                    actividadCount.classList.remove('warning');
+                }
+                
+                if (count > 50) {
+                    actividadCount.classList.add('danger');
+                    this.value = this.value.substring(0, 50);
+                    actividadCount.textContent = '50/50';
+                } else {
+                    actividadCount.classList.remove('danger');
+                }
+            });
+            
+            descripcionInput.addEventListener('input', function() {
+                const count = this.value.length;
+                descripcionCount.textContent = `${count}/200`;
+                
+                if (count > 180) {
+                    descripcionCount.classList.add('warning');
+                } else {
+                    descripcionCount.classList.remove('warning');
+                }
+                
+                if (count > 200) {
+                    descripcionCount.classList.add('danger');
+                    this.value = this.value.substring(0, 200);
+                    descripcionCount.textContent = '200/200';
+                } else {
+                    descripcionCount.classList.remove('danger');
+                }
+            });
+            
+            // Manejar el envío del formulario
+            document.getElementById('formulario_crear_actividad').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Obtener los valores del formulario
+                const actividad = document.getElementById('actividad').value;
+                const descripcion = document.getElementById('descripcion').value;
+                const estado = document.querySelector('input[name="estado"]:checked').value;
+                
+                // Validaciones adicionales
+                if (actividad.trim() === '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'El nombre de la actividad es obligatorio',
+                        confirmButtonColor: '#e74c3c'
+                    });
+                    return;
+                }
+                
+                if (descripcion.trim() === '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'La descripción de la actividad es obligatoria',
+                        confirmButtonColor: '#e74c3c'
+                    });
+                    return;
+                }
+                
+                // Mostrar confirmación
+                Swal.fire({
+                    title: '¿Crear actividad?',
+                    text: '¿Está seguro de que desea crear esta actividad?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3498db',
+                    cancelButtonColor: '#95a5a6',
+                    confirmButtonText: 'Sí, crear',
+                    cancelButtonText: 'Cancelar'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const formData = new FormData();
+                            formData.append('crear_actividad_postmethod', '1');
+                            formData.append('actividad', actividad);
+                            formData.append('descripcion', descripcion);
+                            formData.append('estado', estado);
+
+                            const response = await fetch('../backend/api/endpoint.php', {
+                                method: 'POST',
+                                body: formData
+                            });
+
+                            if (!response.ok) {
+                                throw new Error('Error al crear actividad');
+                            }
+
+                            const data = await response.json();
+                            if (data.success) {
+                                // Mostrar mensaje de éxito
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Actividad creada!',
+                                    text: 'La actividad se ha creado correctamente',
+                                    confirmButtonColor: '#2ecc71'
+                                }).then(() => {
+                                    // Redirigir a la página principal
+                                    window.location.href = 'index.html';
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message || 'Error al crear la actividad',
+                                    confirmButtonColor: '#e74c3c'
+                                });
+                            }
+                        } catch (error) {
+                            console.error('Error creando actividad:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al crear la actividad',
+                                confirmButtonColor: '#e74c3c'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Efecto de enfoque en los campos del formulario
+            const formControls = document.querySelectorAll('.form-control');
+            formControls.forEach(control => {
+                control.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                control.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.parentElement.classList.remove('focused');
+                    }
+                });
+            });
         });
+        
+        // Función para crear actividad (simulada)
+        function CrearActividad() {
+            console.log("Función CrearActividad inicializada");
+            // Esta función se integraría con tu lógica existente en main.js
+        }
     </script>
-    </body>
+</body>
 </html>

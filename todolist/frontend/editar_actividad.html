@@ -1,45 +1,650 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>  
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Todo List</title>
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/bootstrap-5.3.8-dist/css/bootstrap.min.css">
-        <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    </head>
-    <body>
-        <div class="container cont_todolist">
-            <h1 class="text-center">EDITAR ACTIVIDAD</h1>
-         <a href="index.html" class="btn btn-primary">Regresar al index</a>
-    
-         <form action="" method="post">
-            <div class="form-group">
-                <label for="actividad">Actividad</label>
-                <input type="text" class="form-control" id="actividad" name="actividad" value="Deberes de calculo">
+<head>  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Actividad - Todo List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --gray-color: #95a5a6;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+        
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--light-color);
+            text-decoration: none;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-header i {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .form-header h2 {
+            color: var(--secondary-color);
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: var(--gray-color);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .character-count {
+            text-align: right;
+            font-size: 14px;
+            color: var(--gray-color);
+            margin-top: 5px;
+        }
+        
+        .character-count.warning {
+            color: var(--warning-color);
+        }
+        
+        .character-count.danger {
+            color: var(--danger-color);
+        }
+        
+        .status-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .status-option {
+            flex: 1;
+            position: relative;
+        }
+        
+        .status-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .status-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .status-option input:checked + .status-label {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .status-icon {
+            font-size: 24px;
+        }
+        
+        .status-pending .status-icon {
+            color: var(--warning-color);
+        }
+        
+        .status-inprogress .status-icon {
+            color: var(--primary-color);
+        }
+        
+        .status-completed .status-icon {
+            color: var(--success-color);
+        }
+        
+        .form-footer {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 16px;
+            flex: 1;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-color);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .activity-info {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            min-width: 150px;
+            color: var(--dark-color);
+        }
+        
+        .info-value {
+            flex: 1;
+            color: var(--secondary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .status-options {
+                flex-direction: column;
+            }
+            
+            .form-footer {
+                flex-direction: column;
+            }
+            
+            .info-item {
+                flex-direction: column;
+            }
+            
+            .info-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+        }
+        
+        /* Estilos para SweetAlert2 personalizados */
+        .swal2-popup {
+            border-radius: var(--border-radius) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-edit"></i> Editar Actividad</h1>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver a la lista de actividades
+            </a>
+        </header>
+        
+        <div class="content">
+            <div class="form-header">
+                <i class="fas fa-tasks"></i>
+                <h2>Modificar Actividad</h2>
+                <p>Actualice los detalles de la actividad según sea necesario</p>
             </div>
-            <div class="form-group">
-                <label for="descripcion">Descripción</label>
-                <input type="text" class="form-control" id="descripcion" name="descripcion" value="Deberes de calculo Completos ">
+            
+            <div class="activity-info">
+                <div class="info-item">
+                    <span class="info-label">ID de actividad:</span>
+                    <span class="info-value">#001</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Fecha de creación:</span>
+                    <span class="info-value">22 de octubre de 2025</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Última actualización:</span>
+                    <span class="info-value">25 de octubre de 2025</span>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="estado">Estado</label>
-                <select name="estado" id="estado" class="form-control">
-                  <option value="2">En progreso</option>
-                    <option value="1">Completado</option>
-                    <option value="0">Pendiente</option>
-                    <option value="2">En progreso</option>
-                </select>
-             <input type="submit" class="btn btn-primary" value="Editar Actividad">
-              </form>
-          
-         
+            
+            <form action="" method="post" id="formulario_editar_actividad">
+                <div class="form-group">
+                    <label for="actividad">
+                        <i class="fas fa-heading"></i> Nombre de la Actividad
+                    </label>
+                    <input type="text" class="form-control" id="actividad" name="actividad" 
+                           placeholder="Ingrese el nombre de la actividad" value="Deberes de cálculo" required>
+                    <div class="character-count" id="actividadCount">15/50</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="descripcion">
+                        <i class="fas fa-align-left"></i> Descripción
+                    </label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" 
+                              placeholder="Describa los detalles de la actividad" required>Resolver los ejercicios de derivadas e integrales para la clase del próximo lunes. Incluye problemas de aplicación de máximos y mínimos.</textarea>
+                    <div class="character-count" id="descripcionCount">120/200</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="estado">
+                        <i class="fas fa-tachometer-alt"></i> Estado
+                    </label>
+                    <div class="status-options">
+                        <div class="status-option status-pending">
+                            <input type="radio" id="estado-pendiente" name="estado" value="0">
+                            <label for="estado-pendiente" class="status-label">
+                                <i class="fas fa-clock status-icon"></i>
+                                <span>Pendiente</span>
+                            </label>
+                        </div>
+                        
+                        <div class="status-option status-inprogress">
+                            <input type="radio" id="estado-progreso" name="estado" value="2" checked>
+                            <label for="estado-progreso" class="status-label">
+                                <i class="fas fa-spinner status-icon"></i>
+                                <span>En Progreso</span>
+                            </label>
+                        </div>
+                        
+                        <div class="status-option status-completed">
+                            <input type="radio" id="estado-completado" name="estado" value="1">
+                            <label for="estado-completado" class="status-label">
+                                <i class="fas fa-check-circle status-icon"></i>
+                                <span>Completado</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-footer">
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                    <button type="button" id="btnEliminar" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                </div>
+            </form>
         </div>
-        <script src="js/jquery-3.7.1.min.js"></script>
-        <script src="css/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-        <!-- SweetAlert2 JS -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="js/main.js"></script>
-    </body>
+    </div>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Función para obtener el ID desde la URL
+        function obtenerIdDesdeUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Función para cargar datos de la actividad
+        async function cargarActividad(id) {
+            try {
+                const response = await fetch(`../backend/api/endpoint.php?obtener_actividad_getmethod=1&id=${id}`);
+                if (!response.ok) {
+                    throw new Error('Error al obtener actividad');
+                }
+                const data = await response.json();
+                if (data.success) {
+                    const actividad = data.actividad;
+
+                    // Actualizar información de la actividad
+                    document.querySelector('.info-value').textContent = `#${actividad.id.toString().padStart(3, '0')}`;
+                    document.querySelectorAll('.info-value')[1].textContent = formatearFecha(actividad.fecha_creacion);
+                    document.querySelectorAll('.info-value')[2].textContent = formatearFecha(actividad.fecha_actualizacion);
+
+                    // Configurar valores iniciales
+                    document.getElementById('actividad').value = actividad.actividad;
+                    document.getElementById('descripcion').value = actividad.descripcion;
+
+                    // Establecer el estado correcto
+                    const estadoInput = document.querySelector(`input[name="estado"][value="${actividad.estado === 'pending' ? '0' : actividad.estado === 'completed' ? '1' : '2'}"]`);
+                    if (estadoInput) {
+                        estadoInput.checked = true;
+                    }
+
+                    // Actualizar contadores
+                    actualizarContador(document.getElementById('actividad'), document.getElementById('actividadCount'), 50);
+                    actualizarContador(document.getElementById('descripcion'), document.getElementById('descripcionCount'), 200);
+                } else {
+                    alert('Actividad no encontrada');
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error('Error cargando actividad:', error);
+                alert('Error al cargar la actividad');
+                window.location.href = 'index.html';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const id = obtenerIdDesdeUrl();
+            if (id) {
+                cargarActividad(id);
+            } else {
+                alert('ID de actividad no encontrado');
+                window.location.href = 'index.html';
+            }
+
+            // Inicializar contadores de caracteres
+            const actividadInput = document.getElementById('actividad');
+            const descripcionInput = document.getElementById('descripcion');
+            const actividadCount = document.getElementById('actividadCount');
+            const descripcionCount = document.getElementById('descripcionCount');
+
+            // Configurar eventos de entrada
+            actividadInput.addEventListener('input', function() {
+                actualizarContador(this, actividadCount, 50);
+            });
+
+            descripcionInput.addEventListener('input', function() {
+                actualizarContador(this, descripcionCount, 200);
+            });
+            
+            // Manejar el envío del formulario
+            document.getElementById('formulario_editar_actividad').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Obtener los valores del formulario
+                const actividad = document.getElementById('actividad').value;
+                const descripcion = document.getElementById('descripcion').value;
+                const estado = document.querySelector('input[name="estado"]:checked').value;
+                
+                // Validaciones
+                if (actividad.trim() === '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'El nombre de la actividad es obligatorio',
+                        confirmButtonColor: '#e74c3c'
+                    });
+                    return;
+                }
+                
+                if (descripcion.trim() === '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'La descripción de la actividad es obligatoria',
+                        confirmButtonColor: '#e74c3c'
+                    });
+                    return;
+                }
+                
+                // Mostrar confirmación
+                Swal.fire({
+                    title: '¿Guardar cambios?',
+                    text: '¿Está seguro de que desea actualizar esta actividad?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3498db',
+                    cancelButtonColor: '#95a5a6',
+                    confirmButtonText: 'Sí, guardar',
+                    cancelButtonText: 'Cancelar'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const id = obtenerIdDesdeUrl();
+                        try {
+                            const formData = new FormData();
+                            formData.append('editar_actividad_postmethod', '1');
+                            formData.append('id', id);
+                            formData.append('actividad', actividad);
+                            formData.append('descripcion', descripcion);
+                            formData.append('estado', estado);
+
+                            const response = await fetch('../backend/api/endpoint.php', {
+                                method: 'POST',
+                                body: formData
+                            });
+
+                            if (!response.ok) {
+                                throw new Error('Error al editar actividad');
+                            }
+
+                            const data = await response.json();
+                            if (data.success) {
+                                // Mostrar mensaje de éxito
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Cambios guardados!',
+                                    text: 'La actividad se ha actualizado correctamente',
+                                    confirmButtonColor: '#2ecc71'
+                                }).then(() => {
+                                    // Redirigir a la página de detalles
+                                    window.location.href = `ver_actividad.html?id=${id}`;
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message || 'Error al editar la actividad',
+                                    confirmButtonColor: '#e74c3c'
+                                });
+                            }
+                        } catch (error) {
+                            console.error('Error editando actividad:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al editar la actividad',
+                                confirmButtonColor: '#e74c3c'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Configurar evento para el botón de eliminar
+            document.getElementById('btnEliminar').addEventListener('click', function() {
+                Swal.fire({
+                    title: '¿Eliminar actividad?',
+                    text: "Esta acción no se puede deshacer. La actividad se eliminará permanentemente.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e74c3c',
+                    cancelButtonColor: '#95a5a6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const id = obtenerIdDesdeUrl();
+                        try {
+                            const formData = new FormData();
+                            formData.append('eliminar_actividad_deletemethod', '1');
+                            formData.append('id', id);
+
+                            const response = await fetch('../backend/api/endpoint.php', {
+                                method: 'DELETE',
+                                body: formData
+                            });
+
+                            if (!response.ok) {
+                                throw new Error('Error al eliminar actividad');
+                            }
+
+                            const data = await response.json();
+                            if (data.success) {
+                                // Mostrar mensaje de éxito
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Actividad eliminada',
+                                    text: 'La actividad ha sido eliminada correctamente',
+                                    confirmButtonColor: '#2ecc71'
+                                }).then(() => {
+                                    // Redirigir a la lista de actividades
+                                    window.location.href = 'index.html';
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message || 'Error al eliminar la actividad',
+                                    confirmButtonColor: '#e74c3c'
+                                });
+                            }
+                        } catch (error) {
+                            console.error('Error eliminando actividad:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al eliminar la actividad',
+                                confirmButtonColor: '#e74c3c'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        
+        function actualizarContador(input, contadorElement, maxLength) {
+            const count = input.value.length;
+            contadorElement.textContent = `${count}/${maxLength}`;
+            
+            // Resetear clases
+            contadorElement.classList.remove('warning', 'danger');
+            
+            // Aplicar clases según el conteo
+            if (count > maxLength * 0.8) {
+                contadorElement.classList.add('warning');
+            }
+            
+            if (count > maxLength) {
+                contadorElement.classList.add('danger');
+                input.value = input.value.substring(0, maxLength);
+                contadorElement.textContent = `${maxLength}/${maxLength}`;
+            }
+        }
+        
+        function formatearFecha(fechaString) {
+            const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(fechaString).toLocaleDateString('es-ES', opciones);
+        }
+    </script>
+</body>
 </html>

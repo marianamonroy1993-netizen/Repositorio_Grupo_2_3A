@@ -1,166 +1,349 @@
-function EliminarActividad(){
-
-  $('#formulario_eliminar_actividad').submit(function(e){
-    e.preventDefault();
-    $.ajax({
-      url: '../backend/api/endpoint.php',
-      type: 'DELETE',
-      dataType: 'json',
-      data: {
-        eliminar_actividad_postmethod: true,
-        id: $('#id').val(),
-      },
-  });
-});
+// Función para formatear fechas
+function formatearFecha(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
 }
 
+// Función para obtener el texto del estado
+function obtenerTextoEstado(estado) {
+    switch(estado) {
+        case 'pending': return 'Pendiente';
+        case 'inprogress': return 'En progreso';
+        case 'completed': return 'Completado';
+        default: return 'Desconocido';
+    }
+}
 
-function CrearActividad(){
-   $('#formulario_crear_actividad').submit(function(e){
-     e.preventDefault();
-   $.ajax({
-     url: '../backend/api/endpoint.php',
-     type: 'POST',
-     dataType: 'json',
-     data: {
-       crear_actividad_postmethod: true,
-       actividad: $('#actividad').val(),
-       descripcion: $('#descripcion').val(),
-       estado: $('#estado').val(),
-     },
-     success: function(data){
-       console.log(data);
-       if(data.success){
-         Swal.fire({
-           icon: 'success',
-           title: '¡Éxito!',
-           text: 'Actividad creada correctamente',
-           showConfirmButton: false,
-           timer: 1500
-         }).then(() => {
-           $('#formulario_crear_actividad')[0].reset();
-           window.location.href = 'index.html';
-         });
-       } else {
-         Swal.fire({
-           icon: 'error',
-           title: 'Error',
-           text: 'Error al crear la actividad',
-           confirmButtonText: 'Aceptar'
-         });
-       }
-     },
-     error: function(error){
-       console.log(error);
-       Swal.fire({
-         icon: 'error',
-         title: 'Error de conexión',
-         text: 'No se pudo conectar con el servidor',
-         confirmButtonText: 'Aceptar'
-       });
-     }
-   });
- });
- }
- 
- 
-    function obtenerDetallesActividad() {
-  // Obtener el ID de la URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get('id');
+// Función para actualizar el tiempo de última actualización
+function actualizarTiempoActualizacion(fechaActualizacion) {
+    // Implementación simple: mostrar la fecha formateada
+    const elemento = document.getElementById('ultimaActualizacion');
+    if (elemento) {
+        elemento.textContent = formatearFecha(fechaActualizacion);
+    }
+}
 
-  if (!id) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'No se proporcionó ID de actividad',
-      confirmButtonText: 'Volver',
-      allowOutsideClick: false
-    }).then((result) => {
-      window.location.href = 'index.html';
+// Función para cargar actividades desde el backend
+async function cargarActividades() {
+    try {
+        const response = await fetch('backend/api/endpoint.php?mostrar_actividades_getmethod=1');
+        if (!response.ok) {
+            throw new Error('Error al cargar actividades');
+        }
+        const actividades = await response.json();
+        return actividades;
+    } catch (error) {
+        console.error('Error cargando actividades:', error);
+        return [];
+    }
+}
+
+// Función para mostrar actividades
+async function mostrarActividades(activities = null) {
+    if (activities === null) {
+        activities = await cargarActividades();
+    }
+    const tbody = document.getElementById('activitiesBody');
+    if (!tbody) return; // Si no existe, no hacer nada (para páginas que no tienen tabla)
+
+    tbody.innerHTML = '';
+
+    if (activities.length === 0) {
+        const noActivities = document.getElementById('noActivities');
+        const activitiesTable = document.getElementById('activitiesTable');
+        if (noActivities) noActivities.style.display = 'block';
+        if (activitiesTable) activitiesTable.style.display = 'none';
+        actualizarEstadisticas(0, 0, 0, 0);
+        return;
+    }
+
+    const noActivities = document.getElementById('noActivities');
+    const activitiesTable = document.getElementById('activitiesTable');
+    if (noActivities) noActivities.style.display = 'none';
+    if (activitiesTable) activitiesTable.style.display = 'table';
+
+    let pendingCount = 0;
+    let inProgressCount = 0;
+    let completedCount = 0;
+
+    activities.forEach(activity => {
+        const row = document.createElement('tr');
+
+        // Determinar clase de estado
+        let statusClass = '';
+        let statusText = '';
+
+        switch(activity.estado) {
+            case 'pending':
+                statusClass = 'status-pending';
+                statusText = 'Pendiente';
+                pendingCount++;
+                break;
+            case 'inprogress':
+                statusClass = 'status-inprogress';
+                statusText = 'En progreso';
+                inProgressCount++;
+                break;
+            case 'completed':
+                statusClass = 'status-completed';
+                statusText = 'Completado';
+                completedCount++;
+                break;
+        }
+
+        row.innerHTML = `
+            <td>${activity.id}</td>
+            <td>${activity.actividad}</td>
+            <td>${activity.descripcion}</td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td>${formatearFecha(activity.fecha_creacion)}</td>
+            <td>${formatearFecha(activity.fecha_actualizacion)}</td>
+            <td class="actions">
+                <button class="btn btn-success btn-sm" onclick="verActividad(${activity.id})">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-warning btn-sm" onclick="editarActividad(${activity.id})">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarActividad(${activity.id})">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="descargarActividad(${activity.id})">
+                    <i class="fas fa-download"></i>
+                </button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
     });
-    return;
-  }
 
-  $.ajax({
-    url: '../backend/api/endpoint.php',
-    type: 'GET',
-    dataType: 'json',
-    data: {
-      obtener_actividad_getmethod: true,
-      id: id
-    },
-    success: function(data) {
-      if (data.success && data.actividad) {
-        $('#actividad').text(data.actividad.actividad);
-        $('#descripcion').text(data.actividad.descripcion);
-        $('#estado').text(data.actividad.estado);
-        $('#fecha_creacion').text(data.actividad.fecha_de_creacion);
-        $('#fecha_actualizacion').text(data.actividad.fecha_de_actualizacion);
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se encontró la actividad',
-          confirmButtonText: 'Volver',
-          allowOutsideClick: false
-        }).then((result) => {
-          window.location.href = 'index.html';
-        });
-      }
-    },
-    error: function(error) {
-      console.log(error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de conexión',
-        text: 'No se pudo conectar con el servidor',
-        confirmButtonText: 'Volver',
-        allowOutsideClick: false
-      }).then((result) => {
-        window.location.href = 'index.html';
-      });
-    }
-  });
+    actualizarEstadisticas(activities.length, pendingCount, inProgressCount, completedCount);
 }
 
-function MostrarActividad(){
- 
-       $.ajax({
-         url: '../backend/api/endpoint.php',
-         type: 'GET',
-         dataType: 'json',
-         data: {
-           mostar_actividades_getmethod: true
-         },
-         success: function(data){
-          console.log(data);
-           let tbody= document.querySelector('tbody');
-           tbody.innerHTML ='';
-           data.forEach(element => {
-             tbody.innerHTML += `
-             <tr>
-               <td>${element.id}</td>
-               <td>${element.actividad}</td>
-               <td>${element.descripcion}</td>
-               <td>${element.estado}</td>
-               <td>${element.fecha_de_creacion}</td>
-               <td>${element.fecha_de_actualizacion}</td>
-               <td><a href="ver_actividad.html?id=${element.id}" class="btn btn-info">Ver</a></td>
-               <td><a href="editar_actividad.html?id=${element.id}" class="btn btn-warning">Editar</a></td>
-               <td><a href="eliminar_actividad.php?id=${element.id}" class="btn btn-danger">Eliminar</a></td>
-             </tr>
-           `;
-           });
-         },
-         error: function(error){
-           console.log(error);
-           Swal.fire({
-             icon: 'error',
-             title: 'Error',
-             text: 'No se pudieron cargar las actividades',
-             confirmButtonText: 'Aceptar'
-           });
-         }
-       });
+// Función para actualizar estadísticas
+function actualizarEstadisticas(total, pending, inProgress, completed) {
+    const totalEl = document.getElementById('totalActivities');
+    const pendingEl = document.getElementById('pendingCount');
+    const inProgressEl = document.getElementById('inProgressCount');
+    const completedEl = document.getElementById('completedCount');
+
+    if (totalEl) totalEl.textContent = total;
+    if (pendingEl) pendingEl.textContent = pending;
+    if (inProgressEl) inProgressEl.textContent = inProgress;
+    if (completedEl) completedEl.textContent = completed;
+}
+
+// Función para filtrar actividades
+async function filtrarActividades() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const statusFilter = document.getElementById('filterStatus').value;
+
+    const allActivities = await cargarActividades();
+    const filteredActivities = allActivities.filter(activity => {
+        const matchesSearch = activity.actividad.toLowerCase().includes(searchTerm) ||
+                             activity.descripcion.toLowerCase().includes(searchTerm);
+        const matchesStatus = statusFilter === '' || activity.estado === statusFilter;
+
+        return matchesSearch && matchesStatus;
+    });
+
+    mostrarActividades(filteredActivities);
+}
+
+// Función para ver actividad en modal
+async function verActividad(id) {
+    try {
+        const response = await fetch(`backend/api/endpoint.php?obtener_actividad_getmethod=1&id=${id}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener actividad');
+        }
+        const data = await response.json();
+        if (data.success) {
+            const activity = data.actividad;
+            const statusText = obtenerTextoEstado(activity.estado);
+
+            const modalBody = document.getElementById('activityModalBody');
+            if (modalBody) {
+                modalBody.innerHTML = `
+                    <div class="activity-detail">
+                        <label>ID:</label>
+                        <p>${activity.id}</p>
+                    </div>
+                    <div class="activity-detail">
+                        <label>Actividad:</label>
+                        <p>${activity.actividad}</p>
+                    </div>
+                    <div class="activity-detail">
+                        <label>Descripción:</label>
+                        <p>${activity.descripcion}</p>
+                    </div>
+                    <div class="activity-detail">
+                        <label>Estado:</label>
+                        <p>${statusText}</p>
+                    </div>
+                    <div class="activity-detail">
+                        <label>Fecha de Creación:</label>
+                        <p>${formatearFecha(activity.fecha_creacion)}</p>
+                    </div>
+                    <div class="activity-detail">
+                        <label>Fecha de Actualización:</label>
+                        <p>${formatearFecha(activity.fecha_actualizacion)}</p>
+                    </div>
+                `;
+
+                const modal = document.getElementById('activityModal');
+                if (modal) modal.style.display = 'flex';
+            }
+        } else {
+            alert('Actividad no encontrada');
+        }
+    } catch (error) {
+        console.error('Error obteniendo actividad:', error);
+        alert('Error al cargar la actividad');
     }
+}
+
+// Función para cerrar modal
+function closeModal() {
+    const modal = document.getElementById('activityModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// Función para editar actividad
+function editarActividad(id) {
+    // En una implementación real, redirigirías a la página de edición
+    window.location.href = `editar_actividad.html?id=${id}`;
+}
+
+// Función para eliminar actividad
+async function eliminarActividad(id) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta actividad? Esta acción no se puede deshacer.')) {
+        try {
+            const formData = new FormData();
+            formData.append('eliminar_actividad_deletemethod', '1');
+            formData.append('id', id);
+
+            const response = await fetch('backend/api/endpoint.php', {
+                method: 'DELETE',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al eliminar actividad');
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                alert('Actividad eliminada correctamente');
+                await mostrarActividades(); // Recargar la lista
+            } else {
+                alert('Error al eliminar la actividad');
+            }
+        } catch (error) {
+            console.error('Error eliminando actividad:', error);
+            alert('Error al eliminar la actividad');
+        }
+    }
+}
+
+// Función para descargar actividad (placeholder)
+function descargarActividad(id) {
+    // Implementación pendiente
+    alert('Función de descarga no implementada aún');
+}
+
+// Función para obtener los detalles de una actividad por su ID
+async function obtenerDetallesActividad(idActividad) {
+    try {
+        const response = await fetch(`../backend/api/endpoint.php?obtener_actividad_getmethod=1&id=${idActividad}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los detalles de la actividad');
+        }
+        const data = await response.json();
+        if (data.success) {
+            const actividad = data.actividad;
+
+            // Actualizar la interfaz de usuario con los detalles de la actividad
+            const actividadTitle = document.getElementById('actividadTitle');
+            if (actividadTitle) actividadTitle.textContent = actividad.actividad;
+
+            const actividadEl = document.getElementById('actividad');
+            if (actividadEl) actividadEl.textContent = actividad.actividad;
+
+            const descripcionEl = document.getElementById('descripcion');
+            if (descripcionEl) descripcionEl.textContent = actividad.descripcion;
+
+            const estadoTexto = obtenerTextoEstado(actividad.estado);
+            const estadoBadge = document.getElementById('estadoBadge');
+            if (estadoBadge) {
+                estadoBadge.textContent = estadoTexto;
+                estadoBadge.className = 'status-badge';
+
+                if (actividad.estado === 'pending') {
+                    estadoBadge.classList.add('status-pending');
+                } else if (actividad.estado === 'inprogress') {
+                    estadoBadge.classList.add('status-inprogress');
+                } else {
+                    estadoBadge.classList.add('status-completed');
+                }
+            }
+
+            const fechaCreacionEl = document.getElementById('fecha_creacion');
+            if (fechaCreacionEl) fechaCreacionEl.textContent = formatearFecha(actividad.fecha_creacion);
+
+            const fechaActualizacionEl = document.getElementById('fecha_actualizacion');
+            if (fechaActualizacionEl) fechaActualizacionEl.textContent = formatearFecha(actividad.fecha_actualizacion);
+
+            const activityIdEl = document.getElementById('activityId');
+            if (activityIdEl) activityIdEl.textContent = `#${actividad.id.toString().padStart(3, '0')}`;
+
+            // Actualizar el tiempo de última actualización
+            actualizarTiempoActualizacion(actividad.fecha_actualizacion);
+        } else {
+            alert('Actividad no encontrada');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('No se pudieron cargar los detalles de la actividad.');
+    }
+}
+
+// Función auxiliar para obtener el ID desde la URL
+function obtenerIdDesdeUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id'); // Asegúrate de que la URL tenga un parámetro 'id'
+}
+
+// Event listeners para la página principal
+document.addEventListener('DOMContentLoaded', async function() {
+    // Verificar si estamos en la página principal (con tabla de actividades)
+    const tbody = document.getElementById('activitiesBody');
+    if (tbody) {
+        await mostrarActividades();
+
+        // Configurar eventos para búsqueda y filtros
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) searchInput.addEventListener('input', filtrarActividades);
+
+        const filterStatus = document.getElementById('filterStatus');
+        if (filterStatus) filterStatus.addEventListener('change', filtrarActividades);
+
+        // Configurar eventos del modal
+        const closeBtn = document.querySelector('.close-btn');
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+        const closeModalBtn = document.getElementById('closeModal');
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+
+        const activityModal = document.getElementById('activityModal');
+        if (activityModal) activityModal.addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    }
+
+    // Verificar si estamos en la página de detalles
+    const idActividad = obtenerIdDesdeUrl();
+    if (idActividad) {
+        obtenerDetallesActividad(idActividad);
+    }
+});
