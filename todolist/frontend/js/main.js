@@ -7,8 +7,26 @@ function EliminarActividad(){
       type: 'DELETE',
       dataType: 'json',
       data: {
-        eliminar_actividad_postmethod: true,
+        eliminar_actividad_deletemethod: true,
         id: $('#id').val(),
+      },
+      success: function(data){
+        console.log(data);
+        if(data.success){
+          Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: data.message || 'Actividad eliminada',
+            timer: 1200,
+            showConfirmButton: false
+          }).then(() => { window.location.href = 'index.php'; });
+        } else {
+          Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'No se pudo eliminar' });
+        }
+      },
+      error: function(err){
+        console.log(err);
+        Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor' });
       },
   });
 });
@@ -38,8 +56,8 @@ function CrearActividad(){
            showConfirmButton: false,
            timer: 1500
          }).then(() => {
-           $('#formulario_crear_actividad')[0].reset();
-           window.location.href = 'index.html';
+         $('#formulario_crear_actividad')[0].reset();
+         window.location.href = 'index.php';
          });
        } else {
          Swal.fire({
@@ -77,7 +95,7 @@ function CrearActividad(){
       confirmButtonText: 'Volver',
       allowOutsideClick: false
     }).then((result) => {
-      window.location.href = 'index.html';
+      window.location.href = 'index.php';
     });
     return;
   }
@@ -105,7 +123,7 @@ function CrearActividad(){
           confirmButtonText: 'Volver',
           allowOutsideClick: false
         }).then((result) => {
-          window.location.href = 'index.html';
+          window.location.href = 'index.php';
         });
       }
     },
@@ -118,7 +136,7 @@ function CrearActividad(){
         confirmButtonText: 'Volver',
         allowOutsideClick: false
       }).then((result) => {
-        window.location.href = 'index.html';
+        window.location.href = 'index.php';
       });
     }
   });
