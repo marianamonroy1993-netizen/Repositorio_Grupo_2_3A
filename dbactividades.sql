@@ -32,6 +32,8 @@ CREATE TABLE `actividades` (
   `actividad` varchar(500) NOT NULL,
   `descripcion` text NOT NULL,
   `estado` int(11) NOT NULL,
+  `categoria` int(11) NOT NULL,
+  
   `fecha_de_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   `fecha_de_actualizacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
