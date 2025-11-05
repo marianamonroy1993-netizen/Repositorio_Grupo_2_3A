@@ -11,11 +11,12 @@
     </head>
     <body>
         <div class="container cont_todolist">
-            <h1 class="text-center">CREAR ACTIVIDAD</h1>
+            <h1 class="text-center">EDITAR ACTIVIDAD</h1>
          <a href="index.html" class="btn btn-primary">Regresar al index</a>
-      
+    
          <div class="container fomulario_actividad" >
-            <form action="" method="post" id="formulario_crear_actividad">
+            <form action="" method="post" id="formulario_editar_actividad">
+                <input type="hidden" id="id" name="id">
                 <div class="form-group">
                     <label for="actividad">Actividad</label>
                     <input type="text" class="form-control" id="actividad" name="actividad" required>
@@ -26,25 +27,32 @@
                 </div>
                 <div class="form-group">
                     <label for="estado">Estado</label>
-                   <select name="estado" id="estado" class="form-control">
-                    <option value="1">Completado</option>
-                    <option value="0">Pendiente</option>
-                    <option value="2">En progreso</option>
-                   </select>
+                    <select name="estado" id="estado" class="form-control">
+                    <option value="Completado">Completado</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="En progreso">En progreso</option>
+                    </select>
                 </div>
-               
-                <button type="submit" class="btn btn-primary">Crear Actividad</button>
+                <div class="form-group">
+                    <label for="categoria">Categoria</label>
+                    <select name="categoria" id="categoria" class="form-control">
+                        <option value="Deberes">Deberes</option>
+                        <option value="Tareas">Tareas</option>
+                        <option value="Proyectos">Proyectos</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar Actividad</button>
             </form>
          </div>
         </div>
-        <script src="js/jquery-3.7.1.min.js" ></script>
+        <script src="js/jquery-3.7.1.min.js"></script>
         <script src="css/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
         <!-- SweetAlert2 JS -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            CrearActividad();
+            EditarActividad();
         });
     </script>
     </body>

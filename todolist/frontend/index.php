@@ -17,9 +17,9 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Categoría</th>
                     <th>Actividad</th>
                     <th>Descripción</th>
+                    <th>Categoría</th>
                     <th>Fecha de Creación</th>
                     <th>Fecha de Actualización</th>
                     <th>Ver</th>
