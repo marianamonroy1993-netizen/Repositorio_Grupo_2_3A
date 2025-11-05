@@ -17,7 +17,7 @@
             <p> <strong>Actividad:</strong> <span id="actividad">Deberes de calculo</span></p>
             <p> <strong>Descripción:</strong> <span id="descripcion">Deberes de calculo</span></p>
             <p> <strong>Estado:</strong> <span id="estado">Completado</span></p>
-            <p> <strong>Categoria:</strong> <span id="tipo">Deberes</span></p>
+            <p> <strong>Categoria:</strong> <span id="categoria">Deberes</span></p>
             <p> <strong>Fecha de Creación:</strong> <span id="fecha_creacion">2025-10-22</span></p>
             <p> <strong>Fecha de Actualización:</strong> <span id="fecha_actualizacion">2025-10-22</span></p>
            

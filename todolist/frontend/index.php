@@ -19,6 +19,7 @@
                     <th>ID</th>
                     <th>Actividad</th>
                     <th>Descripción</th>
+                    <th>Estado</th>
                     <th>Categoría</th>
                     <th>Fecha de Creación</th>
                     <th>Fecha de Actualización</th>

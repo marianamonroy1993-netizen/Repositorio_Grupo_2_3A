@@ -14,15 +14,16 @@
             <h1 class="text-center">ELIMINAR ACTIVIDAD</h1>
          <a href="index.html" class="btn btn-primary">Regresar al index</a>
          <div class="container fomulario_actividad" >
-            <p> <strong>Actividad:</strong> <span id="actividad">Deberes de calculo</span></p>
-            <p> <strong>Descripción:</strong> <span id="descripcion">Deberes de calculo</span></p>
-            <p> <strong>Estado:</strong> <span id="estado">Completado</span></p>
-            <p> <strong>Fecha de Creación:</strong> <span id="fecha_creacion">2025-10-22</span></p>
-            <p> <strong>Fecha de Actualización:</strong> <span id="fecha_actualizacion">2025-10-22</span></p>
+            <p> <strong>Actividad:</strong> <span id="actividad">Cargando...</span></p>
+            <p> <strong>Descripción:</strong> <span id="descripcion">Cargando...</span></p>
+            <p> <strong>Estado:</strong> <span id="estado">Cargando...</span></p>
+             <p> <strong>Categoria:</strong> <span id="categoria">Cargando...</span></p>
+            <p> <strong>Fecha de Creación:</strong> <span id="fecha_creacion">Cargando...</span></p>
+            <p> <strong>Fecha de Actualización:</strong> <span id="fecha_actualizacion">Cargando...</span></p>
            
          </div>
          <form action="" method="post" id="formulario_eliminar_actividad">
-            <input type="hidden" name="id" id="id" value="<?php echo $_GET['id']; ?>">
+            <input type="hidden" name="id" id="id">
             <input type="submit" class="btn btn-danger" value="Eliminar Actividad">
          </form>
         </div>
@@ -33,6 +34,7 @@
         <script src="js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            CargarActividadParaEliminar();
             EliminarActividad();
         });
     </script>
