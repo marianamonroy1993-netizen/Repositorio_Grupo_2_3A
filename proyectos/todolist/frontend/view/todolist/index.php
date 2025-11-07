@@ -16,6 +16,7 @@
                     <th>Descripción</th>
                     <th>Estado</th>
                     <th>Tipo</th>
+                    <th>Categoría</th>
                     <th>Fecha de Creación</th>
                     <th>Fecha de Actualización</th>
                     <th>Descargar</th>
