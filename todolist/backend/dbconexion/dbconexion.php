@@ -6,7 +6,7 @@ class dbconexion{
             $host="localhost";
             $user="root";
             $password="";
-            $database="dbactividades.sql";
+            $database="dbactividades";
             $conn= new PDO("mysql:host=$host;dbname=$database", $user, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
