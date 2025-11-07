@@ -7,23 +7,28 @@
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/bootstrap-5.3.8-dist/css/bootstrap.min.css">
         <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"> 
     </head>
     <body>
         <div class="container cont_todolist">
+            <h1 class="text-center">DESCARGAR ACTIVIDAD</h1>
+         <a href="index.html" class="btn btn-primary">Regresar al index</a>
+        <div class="container cont_todolist">
             <h1 class="text-center">MOSTAR  ACTIVIDAD</h1>
          <a href="index.html" class="btn btn-primary">Regresar al index</a>
-         <div class="container documento_de_actividad" >
+         <button class="btn btn-info" id="descargar_actividad">Descargar Actividad</button>
+         <div class="container documento_de_actividad" id="DescargarActividad">
             <h1 class="text-center"> <strong>Actividad:</strong> <span id="actividad">Deberes de calculo</span></h1>
             <p> <strong>Descripción:</strong> <span id="descripcion">Deberes de calculo</span></p>
             <p> <strong>Estado:</strong> <span id="estado">Completado</span></p>
-            <p> <strong>Categoria:</strong> <span id="categoria">Completado</span></p>
+            <p> <strong>Categoria:</strong> <span id="categoria">Deberes</span></p>
             <p> <strong>Fecha de Creación:</strong> <span id="fecha_creacion">2025-10-22</span></p>
+            <p> <strong>Tipo:</strong> <span id="tipo">Deberes</span></p>
             <p> <strong>Fecha de Actualización:</strong> <span id="fecha_actualizacion">2025-10-22</span></p>
-           
-         </div>
+
+        </div>   
         </div>
-        
+
         <!-- jQuery -->
         <script src="js/jquery-3.7.1.min.js"></script>
         <!-- Bootstrap JS -->
@@ -32,10 +37,11 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Main JS -->
         <script src="js/main.js"></script>
-        <script>
-            $(document).ready(function() {
-                obtenerDetallesActividad();
-            });
-        </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function (){
+            verActividad();
+            imprimirActividad();
+        });
+    </script>
     </body>
 </html>

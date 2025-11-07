@@ -17,7 +17,7 @@
             <p> <strong>Actividad:</strong> <span id="actividad">Cargando...</span></p>
             <p> <strong>Descripción:</strong> <span id="descripcion">Cargando...</span></p>
             <p> <strong>Estado:</strong> <span id="estado">Cargando...</span></p>
-             <p> <strong>Categoria:</strong> <span id="categoria">Cargando...</span></p>
+            <p> <strong>Categoria:</strong> <span id="categoria">Cargando...</span></p>
             <p> <strong>Fecha de Creación:</strong> <span id="fecha_creacion">Cargando...</span></p>
             <p> <strong>Fecha de Actualización:</strong> <span id="fecha_actualizacion">Cargando...</span></p>
            

@@ -70,7 +70,7 @@ function CrearActividad(){
        actividad: $('#actividad').val(),
        descripcion: $('#descripcion').val(),
        estado: $('#estado').val(),
-       categoria: $('#categoria').val(),
+       tipo: $('#tipo').val(),
      },
      success: function(data){
        console.log(data);
@@ -83,7 +83,7 @@ function CrearActividad(){
            timer: 1500
          }).then(() => {
            $('#formulario_crear_actividad')[0].reset();
-           window.location.href = 'index.php';
+           window.location.href = 'index.html';
          });
        } else {
          Swal.fire({
@@ -120,7 +120,7 @@ function EditarActividad(){
       text: 'No se proporcionó un ID válido',
       confirmButtonText: 'Aceptar'
     }).then(() => {
-      window.location.href = 'index.php';
+      window.location.href = 'index.html';
     });
     return;
   }
@@ -142,7 +142,7 @@ function EditarActividad(){
         $('#actividad').val(actividad.actividad);
         $('#descripcion').val(actividad.descripcion);
         $('#estado').val(actividad.estado);
-        $('#categoria').val(actividad.categoria);
+        $('#tipo').val(actividad.tipo);
       } else {
         Swal.fire({
           icon: 'error',
@@ -150,7 +150,7 @@ function EditarActividad(){
           text: 'Actividad no encontrada',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          window.location.href = 'index.php';
+          window.location.href = 'index.html';
         });
       }
     },
@@ -178,7 +178,7 @@ function EditarActividad(){
         actividad: $('#actividad').val(),
         descripcion: $('#descripcion').val(),
         estado: $('#estado').val(),
-        categoria: $('#categoria').val(),
+        tipo: $('#tipo').val(),
       },
       success: function(data){
         console.log(data);
@@ -190,7 +190,7 @@ function EditarActividad(){
             showConfirmButton: false,
             timer: 1500
           }).then(() => {
-            window.location.href = 'index.php';
+            window.location.href = 'index.html';
           });
         } else {
           Swal.fire({
@@ -226,7 +226,7 @@ function VerActividad(){
       text: 'No se proporcionó un ID válido',
       confirmButtonText: 'Aceptar'
     }).then(() => {
-      window.location.href = 'index.php';
+      window.location.href = 'index.html';
     });
     return;
   }
@@ -251,7 +251,7 @@ function VerActividad(){
         let estadoTexto = '';
     
         $('#estado').text(actividad.estado);
-        $('#categoria').text(actividad.categoria);
+        $('#tipo').text(actividad.tipo);
         $('#fecha_creacion').text(actividad.fecha_de_creacion);
         $('#fecha_actualizacion').text(actividad.fecha_de_actualizacion);
       } else {
@@ -261,7 +261,7 @@ function VerActividad(){
           text: 'Actividad no encontrada',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          window.location.href = 'index.php';
+          window.location.href = 'index.html';
         });
       }
     },
@@ -289,7 +289,7 @@ function CargarActividadParaEliminar(){
       text: 'No se proporcionó un ID válido',
       confirmButtonText: 'Aceptar'
     }).then(() => {
-      window.location.href = 'index.php';
+      window.location.href = 'index.html';
     });
     return;
   }
@@ -317,7 +317,6 @@ function CargarActividadParaEliminar(){
         let estadoTexto = '';
     
         $('#estado').text(actividad.estado);
-        $('#categoria').text(actividad.categoria);
         $('#fecha_creacion').text(actividad.fecha_de_creacion);
         $('#fecha_actualizacion').text(actividad.fecha_de_actualizacion);
       } else {
@@ -327,7 +326,7 @@ function CargarActividadParaEliminar(){
           text: 'Actividad no encontrada',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          window.location.href = 'index.php';
+          window.location.href = 'index.html';
         });
       }
     },
@@ -367,7 +366,7 @@ function MostrarActividad(){
               <td>${element.actividad}</td>
               <td>${element.descripcion}</td>
               <td>${element.estado}</td>
-              <td>${element.categoria}</td>
+              <td>${element.tipo}</td>
               <td>${element.fecha_de_creacion}</td>
               <td>${element.fecha_de_actualizacion}</td>
               <td><a href="descargar_actividad.html?id=${element.id}" class="btn btn-info">Descargar</a></td>

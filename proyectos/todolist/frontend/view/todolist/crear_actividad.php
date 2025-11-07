@@ -33,8 +33,8 @@
                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="categoria">Categoria</label>
-                    <select name="categoria" id="categoria" class="form-control">
+                    <label for="tipo">Tipo</label>
+                    <select name="tipo" id="tipo" class="form-control">
                         <option value="Deberes">Deberes</option>
                         <option value="Tareas">Tareas</option>
                         <option value="Proyectos">Proyectos</option>
