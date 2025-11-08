@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-<?php include '../componet/head.php'; ?>
+<?php include '../component/head.php'; ?>
 <body>
-<?php include '../componet/nav.php'; ?>
+<?php include '../component/nav.php'; ?>
 
 <!-- Hero Section - Register -->
 <section class="hero-section-register">
@@ -191,7 +191,7 @@
 
               <!-- Login -->
               <div class="text-center">
-                <p class="mb-0">¿Ya tienes una cuenta? <a href="Login.php" class="text-primary fw-semibold text-decoration-none">Inicia sesión aquí</a></p>
+                <p class="mb-0">¿Ya tienes una cuenta? <a href="login.php" class="text-primary fw-semibold text-decoration-none">Inicia sesión aquí</a></p>
               </div>
             </form>
           </div>
@@ -201,7 +201,7 @@
   </div>
 </section>
 
-<?php include '../componet/footer.php'; ?>
+<?php include '../component/footer.php'; ?>
 
 <!-- Custom Styles -->
 <style>
@@ -569,7 +569,7 @@
                 timer: 2000,
                 showConfirmButton: false
               }).then(() => {
-                window.location.href = 'Login.php';
+                window.location.href = 'login.php';
               });
             } else {
               Swal.fire({

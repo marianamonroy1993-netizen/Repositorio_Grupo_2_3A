@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-<?php include '../componet/head.php'; ?>
+<?php include '../component/head.php'; ?>
 <body>
-<?php include '../componet/nav.php'; ?>
+<?php include '../component/nav.php'; ?>
 
 <!-- Hero Section - Landing Page -->
 <section class="hero-section">
@@ -119,7 +119,7 @@
   </div>
 </section>
 
-<?php include '../componet/footer.php'; ?>
+<?php include '../component/footer.php'; ?>
 
 <!-- Custom Styles -->
 <style>

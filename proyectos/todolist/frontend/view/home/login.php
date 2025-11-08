@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-<?php include '../componet/head.php'; ?>
+<?php include '../component/head.php'; ?>
 <body>
-<?php include '../componet/nav.php'; ?>
+<?php include '../component/nav.php'; ?>
 
 <!-- Hero Section - Login -->
 <section class="hero-section-login">
@@ -122,7 +122,7 @@
 
               <!-- Registro -->
               <div class="text-center">
-                <p class="mb-0">¿No tienes una cuenta? <a href="registrer.php" class="text-primary fw-semibold text-decoration-none">Regístrate aquí</a></p>
+                <p class="mb-0">¿No tienes una cuenta? <a href="register.php" class="text-primary fw-semibold text-decoration-none">Regístrate aquí</a></p>
               </div>
             </form>
           </div>
@@ -132,7 +132,7 @@
   </div>
 </section>
 
-<?php include '../componet/footer.php'; ?>
+<?php include '../component/footer.php'; ?>
 
 <!-- Custom Styles -->
 <style>

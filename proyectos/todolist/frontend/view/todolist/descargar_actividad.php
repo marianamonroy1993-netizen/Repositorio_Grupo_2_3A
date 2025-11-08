@@ -4,18 +4,18 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Todo List</title>
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../../css/style.css">
+        <link rel="stylesheet" href="../../css/bootstrap-5.3.8-dist/css/bootstrap.min.css">
         <!-- SweetAlert2 CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"> 
     </head>
     <body>
         <div class="container cont_todolist">
             <h1 class="text-center">DESCARGAR ACTIVIDAD</h1>
-         <a href="index.html" class="btn btn-primary">Regresar al index</a>
+         <a href="index.php" class="btn btn-primary">Regresar al index</a>
         <div class="container cont_todolist">
             <h1 class="text-center">MOSTAR  ACTIVIDAD</h1>
-         <a href="index.html" class="btn btn-primary">Regresar al index</a>
+         <a href="index.php" class="btn btn-primary">Regresar al index</a>
          <button class="btn btn-info" id="descargar_actividad">Descargar Actividad</button>
          <div class="container documento_de_actividad" id="DescargarActividad">
             <h1 class="text-center"> <strong>Actividad:</strong> <span id="actividad">Deberes de calculo</span></h1>
@@ -28,6 +28,7 @@
 
         </div>   
         </div>
+
 
         <!-- jQuery -->
         <script src="js/jquery-3.7.1.min.js"></script>
