@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       <head>  
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,8 @@
 <?php include '../componet/head.php'; ?>
 <?php include '../componet/nav.php'; ?>
 =======
+=======
+>>>>>>> Stashed changes
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,6 +26,9 @@
 </head>
 <?php include '../component/head.php'; ?>
 <?php include '../component/nav.php'; ?>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     <body>
