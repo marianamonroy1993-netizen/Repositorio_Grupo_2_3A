@@ -68,11 +68,12 @@ ALTER TABLE `user`
 
 CREATE TABLE `actividades` (
   `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `actividad` varchar(500) NOT NULL,
   `descripcion` text NOT NULL,
-  `estado` int(11) NOT NULL,
-  `categoria` int(11) NOT NULL,
-  
+  `estado` varchar(50) NOT NULL,
+  `tipo` varchar(50) NOT NULL,
+
   `fecha_de_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   `fecha_de_actualizacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -81,13 +82,13 @@ CREATE TABLE `actividades` (
 -- Volcado de datos para la tabla `actividades`
 --
 
-INSERT INTO `actividades` (`id`, `actividad`, `descripcion`, `estado`, `fecha_de_creacion`, `fecha_de_actualizacion`) VALUES
-(2, 'Revisión bibliográfica 2025', 'Investigación de fuentes teóricas y antecedentes relacionados.', 1, '2025-10-24 22:38:45', '2025-10-24 22:38:45'),
-(3, 'Deberes de calculo 4', 'Deberes de calculo Completos wq', 0, '2025-10-24 23:31:19', '2025-10-24 23:31:19'),
-(4, 'Deberes de calculo 6', 'Deberes de calculo Completos  Practica nueva ', 2, '2025-10-24 23:32:54', '2025-10-24 23:32:54'),
-(5, 'Valdes Jokabeth', 'Estudiantes del curso de 3a Materia Programación Web Y Diseño', 0, '2025-10-24 23:34:34', '2025-10-24 23:34:34'),
-(6, 'Valdes Jokabeth2', 'Estudiantes del curso de 3a Materia Programación Web Y Diseño', 1, '2025-10-24 23:58:56', '2025-10-24 23:58:56'),
-(7, 'Deberes de calculo 6', 'Deberes de calculo Completos wq', 0, '2025-10-24 23:59:24', '2025-10-24 23:59:24');
+INSERT INTO `actividades` (`id`, `user_id`, `actividad`, `descripcion`, `estado`, `tipo`, `fecha_de_creacion`, `fecha_de_actualizacion`) VALUES
+(2, 1, 'Revisión bibliográfica 2025', 'Investigación de fuentes teóricas y antecedentes relacionados.', 'En Progreso', 'Estudio', '2025-10-24 22:38:45', '2025-10-24 22:38:45'),
+(3, 1, 'Deberes de calculo 4', 'Deberes de calculo Completos wq', 'Pendiente', 'Estudio', '2025-10-24 23:31:19', '2025-10-24 23:31:19'),
+(4, 1, 'Deberes de calculo 6', 'Deberes de calculo Completos  Practica nueva ', 'Completada', 'Estudio', '2025-10-24 23:32:54', '2025-10-24 23:32:54'),
+(5, 1, 'Valdes Jokabeth', 'Estudiantes del curso de 3a Materia Programación Web Y Diseño', 'Pendiente', 'Trabajo', '2025-10-24 23:34:34', '2025-10-24 23:34:34'),
+(6, 1, 'Valdes Jokabeth2', 'Estudiantes del curso de 3a Materia Programación Web Y Diseño', 'En Progreso', 'Trabajo', '2025-10-24 23:58:56', '2025-10-24 23:58:56'),
+(7, 1, 'Deberes de calculo 6', 'Deberes de calculo Completos wq', 'Pendiente', 'Estudio', '2025-10-24 23:59:24', '2025-10-24 23:59:24');
 
 --
 -- Índices para tablas volcadas
