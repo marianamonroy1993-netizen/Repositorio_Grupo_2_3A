@@ -13,9 +13,6 @@
         <div class="container cont_todolist">
             <h1 class="text-center">DESCARGAR ACTIVIDAD</h1>
          <a href="index.php" class="btn btn-primary">Regresar al index</a>
-        <div class="container cont_todolist">
-            <h1 class="text-center">MOSTAR  ACTIVIDAD</h1>
-         <a href="index.php" class="btn btn-primary">Regresar al index</a>
          <button class="btn btn-info" id="descargar_actividad">Descargar Actividad</button>
          <div class="container documento_de_actividad" id="DescargarActividad">
             <h1 class="text-center"> <strong>Actividad:</strong> <span id="actividad">Deberes de calculo</span></h1>

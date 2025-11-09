@@ -1,7 +1,7 @@
 function EliminarActividad(){
   $('#formulario_eliminar_actividad').submit(function(e){
     e.preventDefault();
-    
+
     Swal.fire({
       title: '¿Estás seguro?',
       text: "Esta acción no se puede revertir",
@@ -106,13 +106,13 @@ function CrearActividad(){
    });
  });
  }
- 
- 
+
+
 function EditarActividad(){
   // Obtener el ID de la URL
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
-  
+
   if(!id){
     Swal.fire({
       icon: 'error',
@@ -218,7 +218,7 @@ function VerActividad(){
   // Obtener el ID de la URL
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
-  
+
   if(!id){
     Swal.fire({
       icon: 'error',
@@ -246,11 +246,18 @@ function VerActividad(){
         const actividad = response.data;
         $('#actividad').text(actividad.actividad);
         $('#descripcion').text(actividad.descripcion);
-        
-        // Convertir el estado numérico a texto
-        let estadoTexto = '';
-    
-        $('#estado').text(actividad.estado);
+
+        // Convertir el estado a texto legible
+        let estadoTexto = actividad.estado;
+        if(actividad.estado.toLowerCase() === 'pendiente') {
+          estadoTexto = 'Pendiente';
+        } else if(actividad.estado.toLowerCase() === 'en progreso') {
+          estadoTexto = 'En Progreso';
+        } else if(actividad.estado.toLowerCase() === 'completada') {
+          estadoTexto = 'Completada';
+        }
+
+        $('#estado').text(estadoTexto);
         $('#tipo').text(actividad.tipo);
         $('#fecha_creacion').text(actividad.fecha_de_creacion);
         $('#fecha_actualizacion').text(actividad.fecha_de_actualizacion);
@@ -281,7 +288,7 @@ function CargarActividadParaEliminar(){
   // Obtener el ID de la URL
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
-  
+
   if(!id){
     Swal.fire({
       icon: 'error',
@@ -312,11 +319,18 @@ function CargarActividadParaEliminar(){
         const actividad = response.data;
         $('#actividad').text(actividad.actividad);
         $('#descripcion').text(actividad.descripcion);
-        
-        // Convertir el estado numérico a texto
-        let estadoTexto = '';
-    
-        $('#estado').text(actividad.estado);
+
+        // Convertir el estado a texto legible
+        let estadoTexto = actividad.estado;
+        if(actividad.estado.toLowerCase() === 'pendiente') {
+          estadoTexto = 'Pendiente';
+        } else if(actividad.estado.toLowerCase() === 'en progreso') {
+          estadoTexto = 'En Progreso';
+        } else if(actividad.estado.toLowerCase() === 'completada') {
+          estadoTexto = 'Completada';
+        }
+
+        $('#estado').text(estadoTexto);
         $('#fecha_creacion').text(actividad.fecha_de_creacion);
         $('#fecha_actualizacion').text(actividad.fecha_de_actualizacion);
       } else {
@@ -343,8 +357,13 @@ function CargarActividadParaEliminar(){
 }
 
 function MostrarActividad(){
- 
-      $.ajax({
+    const activitiesContainer = document.getElementById('activitiesContainer');
+    const noActivitiesMessage = document.getElementById('noActivitiesMessage');
+
+    // Mostrar loading
+    activitiesContainer.innerHTML = '<div class="col-12 text-center py-5"><div class="loading"></div><p class="text-muted mt-2">Cargando actividades...</p></div>';
+
+    $.ajax({
         url: '../../../backend/api/endpoint.php',
         type: 'GET',
         dataType: 'json',
@@ -352,61 +371,241 @@ function MostrarActividad(){
           mostar_actividades_getmethod: true
         },
         success: function(data){
-         console.log(data);
-          let tbody= document.querySelector('tbody');
-          tbody.innerHTML ='';
-          data.forEach(element => {
-            // Convertir el estado numérico a texto
-            let estadoTexto = '';
-          
-            
-            tbody.innerHTML += `
-            <tr>
-              <td>${element.id}</td>
-              <td>${element.actividad}</td>
-              <td>${element.descripcion}</td>
-              <td>${element.estado}</td>
-              <td>${element.tipo}</td>
-              <td>${element.fecha_de_creacion}</td>
-              <td>${element.fecha_de_actualizacion}</td>
-              <td><a href="descargar_actividad.php?id=${element.id}" class="btn btn-success">Descargar</a></td>
-              <td><a href="ver_actividad.php?id=${element.id}" class="btn btn-info">Ver</a></td>
-              <td><a href="editar_actividad.php?id=${element.id}" class="btn btn-warning">Editar</a></td>
-              <td><a href="eliminar_actividad.php?id=${element.id}" class="btn btn-danger">Eliminar</a></td>
-            </tr>
-          `;
-          });
+            console.log(data);
+
+            if(data.length === 0) {
+                activitiesContainer.innerHTML = '';
+                noActivitiesMessage.classList.remove('d-none');
+                return;
+            }
+
+            noActivitiesMessage.classList.add('d-none');
+            activitiesContainer.innerHTML = '';
+
+            data.forEach(element => {
+                // Determinar clase CSS basada en el estado
+                let statusClass = 'pending';
+                let statusText = element.estado;
+                let statusColor = 'warning';
+
+                if(element.estado.toLowerCase() === 'completada') {
+                    statusClass = 'completed';
+                    statusColor = 'success';
+                } else if(element.estado.toLowerCase() === 'en progreso') {
+                    statusClass = 'in-progress';
+                    statusColor = 'info';
+                }
+
+                // Crear card para cada actividad
+                const cardHtml = `
+                    <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+                        <div class="activity-card ${statusClass}" data-id="${element.id}">
+                            <div class="card-body">
+                                <div class="activity-title">
+                                    <i class="bi bi-check-circle-fill text-${statusColor} me-2"></i>
+                                    ${element.actividad}
+                                </div>
+                                <div class="activity-description">
+                                    ${element.descripcion}
+                                </div>
+                                <div class="activity-meta">
+                                    <span class="status-badge ${statusClass}">${element.estado}</span>
+                                    <span class="type-badge">${element.tipo}</span>
+                                </div>
+                                <div class="activity-actions">
+                                    <button class="btn btn-action btn-view" onclick="openViewModal(${element.id})">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-action btn-edit" onclick="openEditModal(${element.id})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-action btn-delete" onclick="openDeleteModal(${element.id}, '${element.actividad}')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                    <a href="descargar_actividad.php?id=${element.id}" class="btn btn-action btn-download">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                activitiesContainer.innerHTML += cardHtml;
+            });
+
+            // Aplicar filtros iniciales
+            applyFilters();
         },
         error: function(error){
-          console.log(error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudieron cargar las actividades',
-            confirmButtonText: 'Aceptar'
-          });
+            console.log(error);
+            activitiesContainer.innerHTML = '<div class="col-12 text-center py-5"><i class="bi bi-exclamation-triangle text-danger fs-1 mb-3"></i><h5 class="text-muted">Error al cargar actividades</h5><p class="text-muted">Por favor, intenta de nuevo más tarde.</p></div>';
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudieron cargar las actividades',
+                confirmButtonText: 'Aceptar'
+            });
         }
-      });
-   }
+    });
+}
+
+// Funciones para abrir modales
+function openViewModal(id) {
+    // Cargar datos de la actividad
+    $.ajax({
+        url: '../../../backend/api/endpoint.php',
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            obtener_actividad_por_id: true,
+            id: id
+        },
+        success: function(response){
+            if(response.success){
+                const actividad = response.data;
+                $('#viewActividad').text(actividad.actividad);
+                $('#viewDescripcion').text(actividad.descripcion);
+                $('#viewEstado').removeClass().addClass('badge').addClass(getStatusBadgeClass(actividad.estado)).text(actividad.estado);
+                $('#viewTipo').text(actividad.tipo);
+                $('#viewFechaCreacion').text(formatDate(actividad.fecha_de_creacion));
+                $('#viewFechaActualizacion').text(formatDate(actividad.fecha_de_actualizacion));
+                $('#downloadBtn').attr('href', `descargar_actividad.php?id=${id}`);
+                $('#viewModal').modal('show');
+            }
+        },
+        error: function(){
+            Swal.fire('Error', 'No se pudo cargar la actividad', 'error');
+        }
+    });
+}
+
+function openEditModal(id) {
+    // Cargar datos de la actividad
+    $.ajax({
+        url: '../../../backend/api/endpoint.php',
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            obtener_actividad_por_id: true,
+            id: id
+        },
+        success: function(response){
+            if(response.success){
+                const actividad = response.data;
+                $('#editId').val(actividad.id);
+                $('#editActividad').val(actividad.actividad);
+                $('#editDescripcion').val(actividad.descripcion);
+                $('#editEstado').val(actividad.estado);
+                $('#editTipo').val(actividad.tipo);
+                $('#editModal').modal('show');
+            }
+        },
+        error: function(){
+            Swal.fire('Error', 'No se pudo cargar la actividad', 'error');
+        }
+    });
+}
+
+function openDeleteModal(id, actividad) {
+    $('#deleteId').val(id);
+    $('#deleteActividad').text(actividad);
+    $('#deleteModal').modal('show');
+}
+
+// Función auxiliar para obtener clase de badge de estado
+function getStatusBadgeClass(estado) {
+    switch(estado.toLowerCase()) {
+        case 'completada': return 'bg-success';
+        case 'en progreso': return 'bg-info';
+        default: return 'bg-warning';
+    }
+}
+
+// Función auxiliar para formatear fecha
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+// Funciones de filtrado
+function applyFilters() {
+    const estadoFilter = $('#filterEstado').val().toLowerCase();
+    const tipoFilter = $('#filterTipo').val().toLowerCase();
+    const searchTerm = $('#searchInput').val().toLowerCase();
+
+    $('.activity-card').each(function() {
+        const card = $(this);
+        const estado = card.find('.status-badge').text().toLowerCase();
+        const tipo = card.find('.type-badge').text().toLowerCase();
+        const titulo = card.find('.activity-title').text().toLowerCase();
+        const descripcion = card.find('.activity-description').text().toLowerCase();
+
+        const matchesEstado = !estadoFilter || estado === estadoFilter;
+        const matchesTipo = !tipoFilter || tipo === tipoFilter;
+        const matchesSearch = !searchTerm ||
+            titulo.includes(searchTerm) ||
+            descripcion.includes(searchTerm);
+
+        if (matchesEstado && matchesTipo && matchesSearch) {
+            card.parent().show();
+        } else {
+            card.parent().hide();
+        }
+    });
+
+    // Verificar si hay actividades visibles
+    const visibleCards = $('.activity-card:visible').length;
+    const noActivitiesMessage = $('#noActivitiesMessage');
+
+    if (visibleCards === 0 && $('.activity-card').length > 0) {
+        if (!noActivitiesMessage.find('.no-filter-results').length) {
+            noActivitiesMessage.find('h3').text('No se encontraron actividades');
+            noActivitiesMessage.find('p').text('Intenta con otros filtros de búsqueda.');
+            noActivitiesMessage.find('button').hide();
+            noActivitiesMessage.addClass('no-filter-results');
+        }
+        noActivitiesMessage.removeClass('d-none');
+    } else {
+        noActivitiesMessage.addClass('d-none');
+    }
+}
+
+// Event listeners para filtros
+$(document).ready(function() {
+    $('#filterEstado, #filterTipo').change(applyFilters);
+    $('#searchInput').on('input', applyFilters);
+    $('#clearFilters').click(function() {
+        $('#filterEstado').val('');
+        $('#filterTipo').val('');
+        $('#searchInput').val('');
+        applyFilters();
+    });
+});
 
 function ImprimirActividad(){
   // Agregar evento al botón de descargar
   $('#descargar_actividad').click(function(e){
     e.preventDefault();
-    
+
     // Obtener el contenido del div a imprimir
     const contenidoOriginal = document.body.innerHTML;
     const contenidoImprimir = document.getElementById('DescargarActividad').innerHTML;
-    
+
     // Guardar el contenido original y reemplazar con el contenido a imprimir
     document.body.innerHTML = contenidoImprimir;
-    
+
     // Imprimir
     window.print();
-    
+
     // Restaurar el contenido original
     document.body.innerHTML = contenidoOriginal;
-    
+
     // Recargar la página para restaurar los eventos
     location.reload();
   });
