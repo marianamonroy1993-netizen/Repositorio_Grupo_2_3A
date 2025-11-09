@@ -14,7 +14,7 @@ function EliminarActividad(){
     }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: '../../../backend/api/endpoint.php',
+          url: '../../../../backend/api/endpoint.php',
           type: 'DELETE',
           dataType: 'json',
           data: {
@@ -368,7 +368,7 @@ function MostrarActividad(){
         type: 'GET',
         dataType: 'json',
         data: {
-          mostar_actividades_getmethod: true
+          mostrar_actividades_getmethod: true
         },
         success: function(data){
             console.log(data);

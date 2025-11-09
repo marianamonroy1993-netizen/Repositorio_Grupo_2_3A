@@ -1,8 +1,10 @@
 <?php
-include '../query/complement.php';
-
 // Asegurar que la respuesta sea JSON
 header('Content-Type: application/json');
+
+include '../dbconexion/dbconexion.php';
+include '../query/consultas.php';
+include '../query/user.php';
 
 // Verificar autenticación para métodos que la requieren
 function requireAuth() {
